@@ -33,6 +33,8 @@ def details_project_req(request, id, id_state):
         chapter = Chapter.objects.get(id=id_state).chapter_title
     else:
         chapter = 'Rejected requirements'
+    if request.method == "POST":
+        req = ReqsProject.objects.get(id=request.POST.get('id'))
     context = {
         'Name': Project.objects.get(id=id).project_name,
         'project': Project.objects.get(id=id),

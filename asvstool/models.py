@@ -61,10 +61,9 @@ class Project(models.Model):
 class ReqsProject(models.Model):
     project = models.ForeignKey(Project, default=None, on_delete=models.CASCADE)
     requirement = models.ForeignKey(Requirement, default=None, on_delete=models.CASCADE)
-    status = models.BooleanField(default=True, blank=True) #0 - Odrzucony  1 - Przyjęty
-    result = models.BooleanField(default=True, blank=True) #0 - Wynik negatywny 1 - Wynik pozytywny
+    status = models.BooleanField(default=None, blank=True) #0 - Odrzucony  1 - Przyjęty
+    result = models.IntegerField(default=0, blank=True) #0 - Nie testowano 1 - Wynik negatywny 2 - Wynik pozytywny
 
     class Meta:
         unique_together = [['project', 'requirement']]
-
 
