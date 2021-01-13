@@ -1,0 +1,34 @@
+    .project_h1{
+        margin: 1vh;
+        font-size: 50px;
+        position: relative;
+        color: white;
+        text-align: center;
+    }
+
+    .navibar_links{
+        margin: auto 0 auto;
+        display: inline-flex;
+        width: 100%;
+        height: 7vh;
+        background: #8288AE;
+    }
+
+    .navibar_links li{
+        list-style: none;
+        margin: auto 5vh;
+        color: #b2b1b1;
+        cursor: pointer;
+        font-size: larger;
+
+    }
+
+    .navibar_links li a{
+        text-decoration: none;
+        color: white;
+        transition: all 0.3s ease 0s;
+    }
+
+    .navibar_links li a:hover{
+        color: gold;
+    }

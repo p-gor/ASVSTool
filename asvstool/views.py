@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Chapter, Subsection, Requirement
+from .models import Chapter, Subsection, Requirement, Project, ReqsProject
 from django.contrib.auth.decorators import login_required
 
 
@@ -11,7 +11,36 @@ def home(request):
 
 @login_required
 def project(request):
-    return render(request, 'project.html', {'title': 'Project'})
+    context = {
+        'Obiekty': Project.objects.all().filter(owner=request.user),
+        'title': 'Project'
+    }
+    return render(request, 'project.html', context)
+
+@login_required
+def details_project(request, id):
+    context = {
+        'Name': Project.objects.get(id=id).project_name,
+        'project': Project.objects.get(id=id),
+        'title': 'Project Details'
+    }
+    return render(request, 'details.html', context)
+
+
+@login_required
+def details_project_req(request, id, id_state):
+    if id_state < 15:
+        chapter = Chapter.objects.get(id=id_state).chapter_title
+    else:
+        chapter = 'Rejected requirements'
+    context = {
+        'Name': Project.objects.get(id=id).project_name,
+        'project': Project.objects.get(id=id),
+        'chapter': chapter,
+        'Obiekty': ReqsProject.objects.all().filter(project=id),
+        'title': 'Project Details'
+    }
+    return render(request, 'details_req.html', context)
 
 
 @login_required

@@ -8,10 +8,16 @@ from django.contrib.auth.models import User
 class Chapter(models.Model):
     chapter_title = models.CharField(max_length=256, default=None)
 
+    def __str__(self):
+        return self.chapter_title
+
 
 class Subsection(models.Model):
     chapter_nr = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     subsection_name = models.CharField(max_length=100, default=None)
+
+    def __str__(self):
+        return self.subsection_name
 
 
 class Requirement(models.Model):
@@ -29,11 +35,15 @@ class Requirement(models.Model):
     stand6 = models.IntegerField(default=2) #Używanie kodu zarządzalnego 0 - odrzucony 1 - do przeprowadzenia 2 - nie dotyczy
     stand7 = models.IntegerField(default=4) #Typ usługi sieciowej 0 - SOAP 1 - REST 2 - GraphQL lub inna 4 - nie dotyczy
 
+    def __str__(self):
+        return self.requirement_name
+
 
 class Project(models.Model):
     project_name = models.CharField(max_length=256, default=None)
     date_made = models.DateTimeField(verbose_name="data_utworzenia", auto_now_add=True)
     owner = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
+    requirements = models.ManyToManyField(Requirement, through='ReqsProject')
     lvl1_project = models.BooleanField(default=True)
     lvl2_project = models.BooleanField(default=True)
     lvl3_project = models.BooleanField(default=True)
@@ -44,11 +54,17 @@ class Project(models.Model):
     stand6_project = models.BooleanField(default=True)  # Używanie kodu zarządzalnego 0 - Używany kod zarzadzalny 1 - Używany kod nie zarządzalny
     stand7_project = models.IntegerField(default=4)  # Typ usługi sieciowej 0 - SOAP 1 - REST 2 - GraphQL lub inna 4 - nie dotyczy
 
+    def __str__(self):
+        return self.project_name
+
 
 class ReqsProject(models.Model):
-    project_id = models.ForeignKey(Project, default=None, on_delete=models.CASCADE)
-    requirement_id = models.ForeignKey(Requirement, default=None, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, default=None, on_delete=models.CASCADE)
+    requirement = models.ForeignKey(Requirement, default=None, on_delete=models.CASCADE)
     status = models.BooleanField(default=True, blank=True) #0 - Odrzucony  1 - Przyjęty
     result = models.BooleanField(default=True, blank=True) #0 - Wynik negatywny 1 - Wynik pozytywny
+
+    class Meta:
+        unique_together = [['project', 'requirement']]
 
 
